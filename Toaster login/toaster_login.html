@@ -1,0 +1,1195 @@
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Toaster Login V2</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+
+ min-height:100vh;
+
+ display:grid;
+
+ place-items:center;
+
+ padding:20px;
+
+ background:#f3e4d6;
+
+ font-family:Poppins,sans-serif;
+
+}
+
+.scene{
+
+ width:100%;
+
+ max-width:550px;
+
+ min-height:730px;
+
+ border-radius:28px;
+
+ overflow:hidden;
+
+ position:relative;
+
+ display:flex;
+
+ flex-direction:column;
+
+ align-items:center;
+
+ justify-content:center;
+
+ padding:35px 15px;
+
+ background:
+
+ radial-gradient(ellipse at 25% 12%,#ffe4c3,transparent 55%),
+
+ linear-gradient(145deg,#f4ae7d,#df875e 60%,#f2b98a);
+
+ box-shadow:0 25px 70px #8b4e3035;
+
+}
+
+.top-label{
+
+ display:flex;
+
+ gap:25px;
+
+ font-size:11px;
+
+ font-weight:700;
+
+ letter-spacing:3px;
+
+ color:#75462d;
+
+ margin-bottom:8px;
+
+}
+
+h1{
+
+ font-size:clamp(28px,6vw,38px);
+
+ font-weight:800;
+
+ color:#291307;
+
+ margin-bottom:40px;
+
+ letter-spacing:-1.5px;
+
+}
+
+.toaster-wrap{
+
+ position:relative;
+
+ display:flex;
+
+ flex-direction:column;
+
+ align-items:center;
+
+ filter:drop-shadow(0 20px 25px #693a2835);
+
+}
+
+/* BREAD CARD */
+
+.card{
+
+ width:230px;
+
+ min-height:265px;
+
+ padding:26px 20px;
+
+ position:relative;
+
+ z-index:3;
+
+ border:5px solid #c58a42;
+
+ border-radius:35px 35px 12px 12px;
+
+ background:linear-gradient(145deg,#fff3c8,#f4d78d);
+
+ box-shadow:
+
+ inset 0 5px 12px #fff9,
+
+ inset 0 -8px 15px #b9783430,
+
+ 0 5px 12px #71431c30;
+
+ transition:transform .55s cubic-bezier(.4,0,.2,1),
+
+ background .8s;
+
+}
+
+.card::before{
+
+ content:"";
+
+ position:absolute;
+
+ inset:9px;
+
+ border:2px solid #e7bc6a;
+
+ border-radius:25px 25px 7px 7px;
+
+ pointer-events:none;
+
+}
+
+.card.sink{
+
+ transform:translateY(100px) scale(.96);
+
+}
+
+.card.toasting{
+
+ background:linear-gradient(145deg,#e6a65e,#c87938);
+
+ border-color:#9d572b;
+
+}
+
+.card.pop{
+
+ transform:translateY(-85px) scale(1.04);
+
+}
+
+.card-title{
+
+ position:relative;
+
+ text-align:center;
+
+ color:#35200d;
+
+ font-weight:800;
+
+ font-size:17px;
+
+ margin-bottom:22px;
+
+}
+
+.field-label{
+
+ position:relative;
+
+ font-size:9px;
+
+ font-weight:700;
+
+ color:#99752e;
+
+ margin-bottom:5px;
+
+ letter-spacing:.7px;
+
+}
+
+.input-wrap{
+
+ position:relative;
+
+ margin-bottom:15px;
+
+}
+
+.input-wrap input{
+
+ width:100%;
+
+ padding:11px 35px 11px 12px;
+
+ border:1.5px solid #d5bb79;
+
+ border-radius:10px;
+
+ background:#ffffffdf;
+
+ outline:none;
+
+ font:500 11px Poppins,sans-serif;
+
+ color:#35200d;
+
+ transition:.25s;
+
+}
+
+.input-wrap input:focus{
+
+ border-color:#a77a31;
+
+ box-shadow:0 0 0 3px #b48b4530;
+
+ background:white;
+
+}
+
+.input-wrap input.error{
+
+ border-color:#d34b4b;
+
+ animation:shake .3s;
+
+}
+
+@keyframes shake{
+
+ 25%{transform:translateX(-5px)}
+
+ 75%{transform:translateX(5px)}
+
+}
+
+.password-toggle{
+
+ position:absolute;
+
+ right:9px;
+
+ top:50%;
+
+ transform:translateY(-50%);
+
+ border:0;
+
+ background:none;
+
+ cursor:pointer;
+
+ font-size:14px;
+
+}
+
+.divider{
+
+ position:relative;
+
+ display:flex;
+
+ align-items:center;
+
+ gap:8px;
+
+ margin-top:18px;
+
+ color:#ad914c;
+
+ font-size:8px;
+
+ font-weight:700;
+
+ white-space:nowrap;
+
+}
+
+.divider::before,.divider::after{
+
+ content:"";
+
+ height:1px;
+
+ flex:1;
+
+ background:#c8ae6c;
+
+}
+
+/* WELCOME */
+
+.welcome{
+
+ display:none;
+
+ min-height:210px;
+
+ flex-direction:column;
+
+ align-items:center;
+
+ justify-content:center;
+
+ text-align:center;
+
+ gap:8px;
+
+ position:relative;
+
+ z-index:1;
+
+}
+
+.welcome.show{
+
+ display:flex;
+
+ animation:welcome .5s both;
+
+}
+
+@keyframes welcome{
+
+ from{opacity:0;transform:scale(.5) rotate(-10deg)}
+
+ to{opacity:1;transform:scale(1) rotate(0)}
+
+}
+
+.w-icon{font-size:48px}
+
+.w-title{
+
+ font-size:20px;
+
+ font-weight:800;
+
+ color:#291307;
+
+}
+
+.w-sub{
+
+ font-size:9px;
+
+ color:#94712d;
+
+}
+
+/* TOASTER BODY */
+
+.toaster-body{
+
+ width:300px;
+
+ height:115px;
+
+ margin-top:-15px;
+
+ position:relative;
+
+ z-index:4;
+
+ border:3px solid #3287b1;
+
+ border-bottom:none;
+
+ border-radius:17px 17px 0 0;
+
+ background:linear-gradient(180deg,#a1d9f0,#56add3 65%,#358db8);
+
+ box-shadow:inset 0 5px 15px #ffffff66;
+
+}
+
+.slots{
+
+ display:flex;
+
+ justify-content:center;
+
+ gap:15px;
+
+ margin-top:17px;
+
+}
+
+.slot{
+
+ width:65px;
+
+ height:13px;
+
+ border-radius:10px;
+
+ background:#174b6a;
+
+ box-shadow:inset 0 3px 5px #0008;
+
+}
+
+/* LEVER */
+
+.lever{
+
+ position:absolute;
+
+ right:20px;
+
+ top:12px;
+
+ width:35px;
+
+ height:85px;
+
+ display:flex;
+
+ flex-direction:column;
+
+ align-items:center;
+
+ cursor:pointer;
+
+ background:transparent;
+
+ border:none;
+
+}
+
+.lever-head{
+
+ width:21px;
+
+ height:17px;
+
+ border-radius:6px;
+
+ background:linear-gradient(145deg,#ff5757,#a90000);
+
+ border:2px solid #850c0c;
+
+ box-shadow:0 4px 8px #0005;
+
+ transition:transform .25s;
+
+}
+
+.lever-rod{
+
+ width:5px;
+
+ height:57px;
+
+ margin-top:2px;
+
+ border-radius:5px;
+
+ background:linear-gradient(to right,#777,#292929,#777);
+
+}
+
+.lever.pulled .lever-head{
+
+ transform:translateY(22px);
+
+}
+
+.lever:focus-visible{
+
+ outline:3px solid white;
+
+ outline-offset:4px;
+
+}
+
+/* BASE */
+
+.toaster-base{
+
+ width:300px;
+
+ min-height:70px;
+
+ padding:15px 18px;
+
+ display:flex;
+
+ align-items:center;
+
+ justify-content:space-between;
+
+ border:3px solid #3287b1;
+
+ border-top:none;
+
+ border-radius:0 0 22px 22px;
+
+ background:linear-gradient(#45a3ca,#216c96);
+
+ box-shadow:0 12px 25px #184e6e55;
+
+}
+
+.vents{display:flex;flex-direction:column;gap:5px}
+
+.vent{height:4px;border-radius:4px;background:#164a6c}
+
+.vent:nth-child(1){width:28px}
+
+.vent:nth-child(2){width:21px}
+
+.vent:nth-child(3){width:25px}
+
+.tray{
+
+ width:45px;
+
+ height:10px;
+
+ border-radius:8px;
+
+ background:#174e7c;
+
+ box-shadow:inset 0 2px 4px #0007;
+
+}
+
+.feet{display:flex;gap:9px}
+
+.foot{
+
+ width:12px;height:8px;
+
+ background:#174c70;
+
+ border-radius:0 0 5px 5px;
+
+}
+
+/* STEAM */
+
+.steam{
+
+ position:absolute;
+
+ top:-18px;
+
+ z-index:5;
+
+ display:flex;
+
+ gap:20px;
+
+ pointer-events:none;
+
+}
+
+.steam span{
+
+ width:12px;
+
+ height:12px;
+
+ border-radius:50%;
+
+ background:#ffffffc0;
+
+ opacity:0;
+
+}
+
+.steam.active span{
+
+ animation:steam 1.2s ease-out;
+
+}
+
+.steam.active span:nth-child(2){animation-delay:.15s}
+
+.steam.active span:nth-child(3){animation-delay:.3s}
+
+@keyframes steam{
+
+ 0%{opacity:0;transform:translateY(0) scale(.5)}
+
+ 40%{opacity:.85}
+
+ 100%{opacity:0;transform:translateY(-48px) scale(2.5)}
+
+}
+
+/* FLYING CRUMBS */
+
+.crumbs{
+
+ position:absolute;
+
+ top:10px;
+
+ left:50%;
+
+ width:260px;
+
+ height:200px;
+
+ transform:translateX(-50%);
+
+ pointer-events:none;
+
+ z-index:8;
+
+}
+
+.crumb{
+
+ position:absolute;
+
+ top:145px;
+
+ left:50%;
+
+ width:7px;
+
+ height:7px;
+
+ border-radius:2px;
+
+ background:#d99a45;
+
+ opacity:0;
+
+}
+
+.crumbs.active .crumb{
+
+ animation:crumbFly .85s cubic-bezier(.15,.7,.3,1) forwards;
+
+}
+
+.crumb:nth-child(1){--x:-100px;--y:-100px;--r:130deg}
+
+.crumb:nth-child(2){--x:90px;--y:-120px;--r:220deg}
+
+.crumb:nth-child(3){--x:-65px;--y:-65px;--r:80deg}
+
+.crumb:nth-child(4){--x:110px;--y:-65px;--r:180deg}
+
+.crumb:nth-child(5){--x:-25px;--y:-140px;--r:270deg}
+
+.crumb:nth-child(6){--x:45px;--y:-95px;--r:100deg}
+
+.crumb:nth-child(7){--x:-125px;--y:-45px;--r:210deg}
+
+.crumb:nth-child(8){--x:125px;--y:-110px;--r:160deg}
+
+@keyframes crumbFly{
+
+ 0%{opacity:0;transform:translate(0,0) rotate(0) scale(.3)}
+
+ 20%{opacity:1}
+
+ 100%{
+
+  opacity:0;
+
+  transform:translate(var(--x),var(--y))
+
+   rotate(var(--r)) scale(1.3);
+
+ }
+
+}
+
+/* TOAST GLOW */
+
+.glow{
+
+ position:absolute;
+
+ width:210px;
+
+ height:210px;
+
+ border-radius:50%;
+
+ background:#ffcf69;
+
+ filter:blur(45px);
+
+ opacity:0;
+
+ z-index:0;
+
+ pointer-events:none;
+
+}
+
+.glow.active{
+
+ animation:glow .9s ease-out;
+
+}
+
+@keyframes glow{
+
+ 0%{opacity:0;transform:scale(.5)}
+
+ 35%{opacity:.65;transform:scale(1.1)}
+
+ 100%{opacity:0;transform:scale(1.8)}
+
+}
+
+/* STATUS */
+
+.status{
+
+ min-height:28px;
+
+ margin-top:25px;
+
+ font-size:11px;
+
+ font-weight:600;
+
+ text-align:center;
+
+}
+
+.status.ok{color:#21520f}
+
+.status.err{color:#9b1515}
+
+@media(max-width:400px){
+
+ .scene{min-height:670px;padding:25px 10px}
+
+ .toaster-body,.toaster-base{width:min(300px,90vw)}
+
+ .card{width:min(230px,75vw)}
+
+}
+
+@media(prefers-reduced-motion:reduce){
+
+ *,*::before,*::after{
+
+  animation-duration:.01ms!important;
+
+  transition-duration:.01ms!important;
+
+ }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="scene">
+
+ <div class="top-label">
+
+  <span>HTML</span><span>CSS</span><span>JS</span>
+
+ </div>
+
+ <h1>Toaster Login</h1>
+
+ <div class="toaster-wrap">
+
+  <div class="glow" id="glow"></div>
+
+  <div class="steam" id="steam">
+
+   <span></span><span></span><span></span>
+
+  </div>
+
+  <div class="crumbs" id="crumbs">
+
+   <i class="crumb"></i><i class="crumb"></i>
+
+   <i class="crumb"></i><i class="crumb"></i>
+
+   <i class="crumb"></i><i class="crumb"></i>
+
+   <i class="crumb"></i><i class="crumb"></i>
+
+  </div>
+
+  <div class="card" id="card">
+
+   <div id="loginView">
+
+    <div class="card-title">Welcome Back!</div>
+
+    <div class="field-label">Username</div>
+
+    <div class="input-wrap">
+
+     <input id="user" type="text"
+
+      placeholder="Enter username"
+
+      autocomplete="username">
+
+    </div>
+
+    <div class="field-label">Password</div>
+
+    <div class="input-wrap">
+
+     <input id="pass" type="password"
+
+      placeholder="Enter password"
+
+      autocomplete="current-password">
+
+     <button class="password-toggle"
+
+      id="togglePassword" type="button">👁</button>
+
+    </div>
+
+    <div class="divider">PULL LEVER TO SUBMIT</div>
+
+   </div>
+
+   <div class="welcome" id="welcomeView">
+
+    <div class="w-icon">🍞</div>
+
+    <div class="w-title">Perfectly Toasted!</div>
+
+    <div class="w-sub">Welcome back successfully ✓</div>
+
+   </div>
+
+  </div>
+
+  <div class="toaster-body">
+
+   <div class="slots">
+
+    <div class="slot"></div>
+
+    <div class="slot"></div>
+
+   </div>
+
+   <button class="lever" id="lever"
+
+    type="button" aria-label="Submit login">
+
+    <span class="lever-head"></span>
+
+    <span class="lever-rod"></span>
+
+   </button>
+
+  </div>
+
+  <div class="toaster-base">
+
+   <div class="vents">
+
+    <div class="vent"></div>
+
+    <div class="vent"></div>
+
+    <div class="vent"></div>
+
+   </div>
+
+   <div class="tray"></div>
+
+   <div class="feet">
+
+    <div class="foot"></div>
+
+    <div class="foot"></div>
+
+   </div>
+
+  </div>
+
+ </div>
+
+ <div class="status" id="status" aria-live="polite"></div>
+
+</div>
+
+<script>
+
+const $ = id => document.getElementById(id);
+
+const user = $('user');
+
+const pass = $('pass');
+
+const card = $('card');
+
+const lever = $('lever');
+
+const status = $('status');
+
+const steam = $('steam');
+
+const crumbs = $('crumbs');
+
+const glow = $('glow');
+
+let busy = false;
+
+let audio;
+
+function playTone(freq,duration,type='sine',volume=.18){
+
+ try{
+
+  audio ||= new (window.AudioContext ||
+
+   window.webkitAudioContext)();
+
+  if(audio.state==='suspended') audio.resume();
+
+  const osc=audio.createOscillator();
+
+  const gain=audio.createGain();
+
+  osc.type=type;
+
+  osc.frequency.setValueAtTime(freq,audio.currentTime);
+
+  gain.gain.setValueAtTime(volume,audio.currentTime);
+
+  gain.gain.exponentialRampToValueAtTime(
+
+   .001,audio.currentTime+duration
+
+  );
+
+  osc.connect(gain);
+
+  gain.connect(audio.destination);
+
+  osc.start();
+
+  osc.stop(audio.currentTime+duration);
+
+ }catch(e){}
+
+}
+
+function soundLever(){
+
+ playTone(180,.09,'square',.2);
+
+}
+
+function soundHeating(){
+
+ playTone(65,.55,'sawtooth',.08);
+
+}
+
+function soundPop(){
+
+ playTone(150,.15,'sine',.3);
+
+ setTimeout(()=>playTone(880,.45,'sine',.2),100);
+
+}
+
+function animate(element){
+
+ element.classList.remove('active');
+
+ void element.offsetWidth;
+
+ element.classList.add('active');
+
+}
+
+function resetStatus(){
+
+ status.textContent='';
+
+ status.className='status';
+
+}
+
+function validate(){
+
+ let valid=true;
+
+ [user,pass].forEach(input=>{
+
+  input.classList.remove('error');
+
+  if(!input.value.trim()){
+
+   valid=false;
+
+   input.classList.add('error');
+
+   setTimeout(()=>input.classList.remove('error'),450);
+
+  }
+
+ });
+
+ if(!valid){
+
+  playTone(220,.15,'square');
+
+  status.textContent='⚠ Fill in both fields first!';
+
+  status.className='status err';
+
+  lever.classList.add('pulled');
+
+  setTimeout(()=>lever.classList.remove('pulled'),300);
+
+ }
+
+ return valid;
+
+}
+
+function pullLever(){
+
+ if(busy)return;
+
+ if(!validate())return;
+
+ busy=true;
+
+ resetStatus();
+
+ soundLever();
+
+ lever.classList.add('pulled');
+
+ card.classList.add('sink','toasting');
+
+ // Heating stage
+
+ soundHeating();
+
+ animate(steam);
+
+ setTimeout(()=>{
+
+  $('loginView').style.display='none';
+
+  $('welcomeView').classList.add('show');
+
+  card.classList.remove('sink','toasting');
+
+  // Toast jumps out!
+
+  setTimeout(()=>{
+
+   card.classList.add('pop');
+
+   lever.classList.remove('pulled');
+
+   soundPop();
+
+   animate(crumbs);
+
+   animate(glow);
+
+   animate(steam);
+
+   status.textContent='✓ Perfectly toasted!';
+
+   status.className='status ok';
+
+   // Return to starting position
+
+   setTimeout(resetForm,2600);
+
+  },100);
+
+ },850);
+
+}
+
+function resetForm(){
+
+ card.classList.remove('pop');
+
+ setTimeout(()=>{
+
+  $('loginView').style.display='block';
+
+  $('welcomeView').classList.remove('show');
+
+  user.value='';
+
+  pass.value='';
+
+  resetStatus();
+
+  busy=false;
+
+ },650);
+
+}
+
+lever.addEventListener('click',pullLever);
+
+$('togglePassword').addEventListener('click',()=>{
+
+ const visible=pass.type==='text';
+
+ pass.type=visible?'password':'text';
+
+ $('togglePassword').textContent=visible?'👁':'🙈';
+
+});
+
+user.addEventListener('keydown',e=>{
+
+ if(e.key==='Enter')pass.focus();
+
+});
+
+pass.addEventListener('keydown',e=>{
+
+ if(e.key==='Enter')pullLever();
+
+});
+
+[user,pass].forEach(input=>{
+
+ input.addEventListener('input',()=>{
+
+  input.classList.remove('error');
+
+  resetStatus();
+
+ });
+
+});
+
+</script>
+
+</body>
+
+</html>
